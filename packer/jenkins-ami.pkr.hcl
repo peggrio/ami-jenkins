@@ -73,7 +73,7 @@ build {
     destination = "/tmp/jenkins.conf"
   }
 
-    provisioner "file" {
+  provisioner "file" {
     source      = "plugins.txt"
     destination = "/tmp/plugins.txt"
   }
