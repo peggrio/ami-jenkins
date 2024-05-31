@@ -8,9 +8,8 @@ Features:
 
 ## Packer instruction
 
-(in local test, run `export AWS_PROFILE=ghactions` before initiation)(no space around '='!!)
-
-1. `packer fmt -var-file=packer/ami.pkrvars.hcl packer/ami.pkr.hcl`
-2. `packer init -var-file=packer/ami.pkrvars.hcl packer/ami.pkr.hcl`
-3. `packer validate -var-file=packer/ami.pkrvars.hcl packer/ami.pkr.hcl`
-4. `packer build -var-file=packer/ami.pkrvars.hcl packer/ami.pkr.hcl`
+(in local test, in `packer` folder, run `export AWS_PROFILE=ghactions` before initiation)(no space around '='!!)
+1. `packer fmt -var-file=jenkins-ami.pkrvars.hcl jenkins-ami.pkr.hcl`
+2. `packer init -var-file=jenkins-ami.pkrvars.hcl jenkins-ami.pkr.hcl`
+3. `packer validate -var-file=jenkins-ami.pkrvars.hcl jenkins-ami.pkr.hcl`                                                            
+4. `packer build -var-file=jenkins-ami.pkrvars.hcl jenkins-ami.pkr.hcl`  
