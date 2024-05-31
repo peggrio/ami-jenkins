@@ -29,10 +29,12 @@ variable "ssh_username" {
 
 variable "vpc_id" {
   type    = string
+  default = "vpc-023f27855f38a83dd"
 }
 
 variable "subnet_id" {
   type    = string
+  default = "subnet-06242053329a9c97d"
 }
 
 source "amazon-ebs" "jenkins-ami" {
