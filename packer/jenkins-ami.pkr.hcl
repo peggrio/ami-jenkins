@@ -74,6 +74,16 @@ build {
   }
 
   provisioner "file" {
+    source      = "casc.yaml"
+    destination = "/tmp/casc.yaml"
+  }
+
+  provisioner "file" {
+    source      = "helloworld.groovy"
+    destination = "/tmp/helloworld.groovy"
+  }
+
+  provisioner "file" {
     source      = "plugins.txt"
     destination = "/tmp/plugins.txt"
   }

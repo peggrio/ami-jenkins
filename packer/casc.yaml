@@ -1,0 +1,16 @@
+jenkins:
+  systemMessage: "This Jenkins Instance is managed by CSYE7125 Su2024 Group4 Students"
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          password: "admin"
+  authorizationStrategy:
+    globalMatrix:
+      permissions:
+        - "Overall/Administer:admin"
+        - "Overall/Read:authenticated"
+
+jobs:
+  - file: /var/lib/jenkins/helloworld.groovy
