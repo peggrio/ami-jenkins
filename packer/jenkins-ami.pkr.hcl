@@ -15,7 +15,6 @@ variable "region" {
 variable "source_ami" {
   type    = string
   default = "ami-04b70fa74e45c3917"
-
 }
 
 variable "instance_type" {
@@ -28,67 +27,91 @@ variable "ssh_username" {
   default = "ubuntu"
 }
 
-source "amazon-ebs" "my-ami" {
+source "amazon-ebs" "jenkins-ami" {
   region        = var.region
   source_ami    = var.source_ami
   instance_type = var.instance_type
   ssh_username  = var.ssh_username
   ami_name      = "jenkins-{{timestamp}}"
   tags = {
-    Name = "Jenkins - {{timestamp}}"
+    Name = "Peizhen-Jenkins - {{timestamp}}"
   }
   vpc_id    = "vpc-023f27855f38a83dd"
   subnet_id = "subnet-06242053329a9c97d"
 }
 
 build {
-  sources = ["sources.amazon-ebs.my-ami"]
+  sources = ["sources.amazon-ebs.jenkins-ami"]
 
   provisioner "file" {
-    source      = "install-jenkins.sh"
+    source      = "jenkins/install-jenkins.sh"
     destination = "/tmp/install-jenkins.sh"
   }
 
   provisioner "file" {
-    source      = "install-nginx.sh"
-    destination = "/tmp/install-nginx.sh"
-  }
-
-  provisioner "file" {
-    source      = "configure-nginx.sh"
-    destination = "/tmp/configure-nginx.sh"
-  }
-
-  provisioner "file" {
-    source      = "jenkins.conf"
+    source      = "jenkins/jenkins.conf"
     destination = "/tmp/jenkins.conf"
   }
 
   provisioner "file" {
-    source      = "create_user_and_helloworld_job.groovy"
-    destination = "create_user_and_helloworld_job.groovy"
-  }
-  provisioner "file" {
-    source      = "plugins.txt"
+    source      = "jenkins/plugins.txt"
     destination = "/tmp/plugins.txt"
   }
 
   provisioner "file" {
-    source      = "jenkins.yaml"
-    destination = "jenkins.yaml"
+    source      = "jenkins/jenkins.yaml"
+    destination = "/tmp/jenkins.yaml"
   }
 
+  provisioner "file" {
+    source      = "nginx/install-nginx.sh"
+    destination = "/tmp/install-nginx.sh"
+  }
+
+  provisioner "file" {
+    source      = "nginx/configure-nginx.sh"
+    destination = "/tmp/configure-nginx.sh"
+  }
+
+  provisioner "file" {
+    source      = "create_user_and_helloworld_job.groovy"
+    destination = "/tmp/create_user_and_helloworld_job.groovy"
+  }
+
+  variable "GH_USERNAME" {
+    type    = string
+    default = ""
+  }
+
+  variable "GH_CREDS" {
+    type    = string
+    default = ""
+  }
+
+  variable "DOCKERHUB_USERNAME" {
+    type    = string
+    default = ""
+  }
+
+  variable "DOCKERHUB_CREDS" {
+    type    = string
+    default = ""
+  }
 
   provisioner "shell" {
+
     inline = [
-      "sudo chmod +x /tmp/install-jenkins.sh",
-      "sudo chmod +x /tmp/install-nginx.sh",
-      "sudo chmod +x /tmp/configure-nginx.sh",
-      "/tmp/install-jenkins.sh",
-      "/tmp/install-nginx.sh",
-      "/tmp/configure-nginx.sh",
+      "echo 'GH_USERNAME=${var.GH_USERNAME}' | sudo tee -a /etc/jenkins.env",
+      "echo 'GH_CREDS=${var.GH_CREDS}' | sudo tee -a /etc/jenkins.env",
+      "echo 'DOCKERHUB_USERNAME=${var.DOCKERHUB_USERNAME}' | sudo tee -a /etc/jenkins.env",
+      "echo 'DOCKERHUB_CREDS=${var.DOCKERHUB_CREDS}' | sudo tee -a /etc/jenkins.env",
+
+      "echo 'Listing current subdirectories in /tmp:'",
+      "ls -l /tmp",
+      "sudo chmod +x /tmp/install-jenkins.sh /tmp/install-nginx.sh /tmp/configure-nginx.sh",
+      "sudo /tmp/install-jenkins.sh",
+      "sudo /tmp/install-nginx.sh",
+      "sudo /tmp/configure-nginx.sh",
     ]
   }
-
-
 }

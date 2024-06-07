@@ -1,5 +1,5 @@
 jenkins:
-  systemMessage: "This Jenkins Instance is managed by CSYE7125 Fall2023 Group 7 Students"
+  systemMessage: "This Jenkins Instance is managed by CSYE7125 Summer2024 group 04"
   securityRealm:
     local:
       allowsSignup: false
@@ -12,4 +12,3 @@ jenkins:
         - "Overall/Administer:admin"
         - "Overall/Read:authenticated"
         - "Overall/Read:anonymous"
-

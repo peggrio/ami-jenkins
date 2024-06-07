@@ -21,7 +21,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_AccessKey }}
           aws-secret-access-key: ${{ secrets.AWS_SecretAccessKey }}
           aws-region: us-east-1
-        continue-on-error: false   
+        continue-on-error: false
 
       - name: Initialize and Validate Packer Template
         run: |
@@ -38,6 +38,9 @@ jobs:
       - name: Build Image with Packer
         run: |
           cd ./packer/
-          packer build jenkins-ami.pkr.hcl 
-
-      
+          packer build \
+          -var "GH_USERNAME=${{ secrets.GH_USERNAME }}" \
+          -var "GH_CREDS=${{ secrets.GH_CREDS }}" \
+          -var "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" \
+          -var "DOCKERHUB_CREDS=${{ secrets.DOCKERHUB_CREDS }}" \
+          jenkins-ami.pkr.hcl
